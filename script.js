@@ -187,7 +187,34 @@ function startPattern(redLeds, blueLeds, pattern){
         }
 
 
+// =====================
+// NORMAL POLICE FLASH
+// =====================
 
+if(pattern === "normal"){
+
+
+    if(patternFrame % 2 === 0){
+
+
+        redLeds.forEach(light =>
+            light.classList.add("active")
+        );
+
+
+    }
+    else{
+
+
+        blueLeds.forEach(light =>
+            light.classList.add("active")
+        );
+
+
+    }
+
+
+}
 
         // =====================
         // ALTERNATE
@@ -290,8 +317,7 @@ function startPattern(redLeds, blueLeds, pattern){
 
 
 
-    },120);
-
+    },250);
 
 
 }// =====================
