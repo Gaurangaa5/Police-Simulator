@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Controller - Police System</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+
+<body>
+
+
+<div class="controller-ui">
+
+
+    <!-- Main Controls -->
+
+    <div class="main-controls">
+
+        <button id="sirenBtn" class="ctrl-btn">
+            🚨 Siren
+        </button>
+
+
+        <button id="hornBtn" class="ctrl-btn">
+            📣 Horn
+        </button>
+
+
+        <button id="lightsBtn" class="ctrl-btn">
+            🔴 Lights
+        </button>
+
+    </div>
+
+
+
+    <!-- Flash Pattern Controls -->
+
+    <div class="pattern-controls">
+
+        <button class="ctrl-btn patternBtn" data-pattern="sweep">
+            ➡ Sweep
+        </button>
+
+
+        <button class="ctrl-btn patternBtn" data-pattern="alternate">
+            🔴🔵 Alternate
+        </button>
+
+
+        <button class="ctrl-btn patternBtn" data-pattern="wigwag">
+            🚔 Wig Wag
+        </button>
+
+
+        <button class="ctrl-btn patternBtn" data-pattern="flash">
+            ⚡ Flash
+        </button>
+
+    </div>
+
+
+
+    <!-- Controller Preview -->
+
+    <div class="preview-section">
+
+
+        <div class="light-bar" id="previewBar">
+
+
+            <div class="side red-side">
+
+                <div class="led red"></div>
+                <div class="led red"></div>
+                <div class="led red"></div>
+                <div class="led red"></div>
+
+            </div>
+
+
+
+            <div class="side blue-side">
+
+                <div class="led blue"></div>
+                <div class="led blue"></div>
+                <div class="led blue"></div>
+                <div class="led blue"></div>
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+
+
+</div>
+
+
+<script type="module" src="script.js"></script>
+
+
+</body>
+
+</html>

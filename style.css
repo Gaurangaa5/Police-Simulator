@@ -3,6 +3,7 @@
     src: url("Rotis-font.otf") format("opentype");
 }
 
+
 * {
     font-family: "Rotis", sans-serif;
     box-sizing: border-box;
@@ -10,146 +11,544 @@
     padding: 0;
 }
 
+
 body {
-    background-color: #0a0a0a;
-    color: white;
-    overflow: hidden;
+
+    background:#0a0a0a;
+
+    color:white;
+
+    overflow:hidden;
+
 }
+
 
 .centered-body {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    height:100vh;
+
 }
 
-/* Index Menu */
+
+/* =====================
+   INDEX MENU
+===================== */
+
+
 .menu-container {
-    text-align: center;
+
+    text-align:center;
+
 }
+
 
 h1 {
-    font-size: 2.5rem;
-    margin-bottom: 2rem;
-    letter-spacing: 2px;
+
+    font-size:2.5rem;
+
+    margin-bottom:2rem;
+
+    letter-spacing:2px;
+
 }
+
 
 .button-group {
-    display: flex;
-    gap: 20px;
+
+    display:flex;
+
+    gap:20px;
+
 }
+
 
 .big-btn {
-    display: block;
-    width: 200px;
-    padding: 20px;
-    background: #1a1a1a;
-    color: white;
-    text-decoration: none;
-    border: 2px solid #333;
-    border-radius: 8px;
-    font-size: 1.2rem;
-    transition: all 0.3s ease;
+
+    width:200px;
+
+    padding:20px;
+
+    background:#151515;
+
+    color:white;
+
+    text-decoration:none;
+
+    border:2px solid #333;
+
+    border-radius:10px;
+
+    font-size:1.2rem;
+
+    transition:.3s;
+
 }
+
 
 .big-btn:hover {
-    background: #333;
-    border-color: #555;
+
+    background:#333;
+
 }
 
-/* Controller UI */
+
+/* =====================
+   CONTROLLER
+===================== */
+
+
 .controller-ui {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
-    gap: 50px;
+
+    height:100vh;
+
+    display:flex;
+
+    flex-direction:column;
+
+    justify-content:center;
+
+    align-items:center;
+
+    gap:50px;
+
 }
+
 
 .main-controls {
-    display: flex;
-    gap: 15px;
+
+    display:flex;
+
+    gap:15px;
+
 }
+
 
 .ctrl-btn {
-    padding: 20px 40px;
-    font-size: 1.2rem;
-    background: #151515;
-    color: white;
-    border: 1px solid #444;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: 0.2s;
-    min-width: 140px;
+
+    min-width:140px;
+
+    padding:20px 40px;
+
+    font-size:1.2rem;
+
+    background:#151515;
+
+    color:white;
+
+    border:1px solid #444;
+
+    border-radius:8px;
+
+    cursor:pointer;
+
+    transition:.2s;
+
 }
+
 
 .ctrl-btn:active {
-    transform: scale(0.95);
+
+    transform:scale(.95);
+
 }
+
 
 .ctrl-btn.active {
-    background: #cc0000;
-    border-color: #ff0000;
-    box-shadow: 0 0 15px rgba(255, 0, 0, 0.4);
+
+    background:#b00000;
+
+    box-shadow:
+    0 0 20px red;
+
+}/* =====================
+   POLICE LIGHT BAR
+===================== */
+
+
+.light-bar {
+
+    width:320px;
+
+    height:75px;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+
+    background:
+    linear-gradient(
+        180deg,
+        #202020,
+        #050505
+    );
+
+
+    border:4px solid #2b2b2b;
+
+    border-radius:18px;
+
+    padding:10px;
+
+
+    box-shadow:
+
+    inset 0 0 25px rgba(255,255,255,.05),
+
+    0 15px 40px rgba(0,0,0,.8);
+
 }
 
-/* Light Bar Construction */
-.light-bar {
-    width: 300px;
-    height: 60px;
-    background: #000;
-    border: 4px solid #1a1a1a;
-    border-radius: 15px;
-    display: flex;
-    padding: 5px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-    position: relative;
-}
+
 
 .light-bar.large {
-    width: 80vw;
-    height: 30vh;
-    border-width: 10px;
-    border-radius: 30px;
+
+
+    width:80vw;
+
+    max-width:1100px;
+
+
+    height:220px;
+
+
+    border-radius:30px;
+
+    border-width:8px;
+
+
+    padding:20px;
+
 }
 
-.light {
-    flex: 1;
-    border-radius: 8px;
-    transition: background 0.1s ease;
-    opacity: 0.15;
+
+
+/* Left and right sections */
+
+
+.side {
+
+    width:48%;
+
+    height:100%;
+
+
+    display:flex;
+
+    gap:8px;
+
 }
 
-.red { background: #ff0000; margin-right: 2px; }
-.blue { background: #0000ff; margin-left: 2px; }
 
-/* Animations */
-@keyframes flash-red {
-    0%, 49% { opacity: 1; box-shadow: 0 0 40px #ff0000; }
-    50%, 100% { opacity: 0.15; box-shadow: none; }
+
+/* Individual LEDs */
+
+
+.led {
+
+
+    flex:1;
+
+
+    border-radius:12px;
+
+
+    opacity:.12;
+
+
+    transition:
+
+    opacity .08s linear,
+
+    transform .08s linear,
+
+    box-shadow .08s linear;
+
+
 }
 
-@keyframes flash-blue {
-    0%, 49% { opacity: 0.15; box-shadow: none; }
-    50%, 100% { opacity: 1; box-shadow: 0 0 40px #0000ff; }
+
+
+/* RED LEDs */
+
+
+.red {
+
+
+    background:
+
+    linear-gradient(
+
+        180deg,
+
+        #ffaaaa,
+
+        #ff0000 50%,
+
+        #850000
+
+    );
+
+
 }
 
-.animating .red { animation: flash-red 0.6s infinite steps(2); }
-.animating .blue { animation: flash-blue 0.6s infinite steps(2); }
 
-/* Car Page Overlay */
+
+/* BLUE LEDs */
+
+
+.blue {
+
+
+    background:
+
+    linear-gradient(
+
+        180deg,
+
+        #bde4ff,
+
+        #0077ff 50%,
+
+        #003080
+
+    );
+
+
+}
+
+
+
+/* Gloss reflection */
+
+
+.led::after {
+
+
+    content:"";
+
+
+    display:block;
+
+
+    height:35%;
+
+
+    width:100%;
+
+
+    border-radius:inherit;
+
+
+    background:
+
+    linear-gradient(
+
+        rgba(255,255,255,.5),
+
+        transparent
+
+    );
+
+
+}
+
+
+
+/* Active LED glow */
+
+
+.led.active {
+
+
+    opacity:1;
+
+    transform:scale(1.05);
+
+
+}
+
+
+
+.red.active {
+
+
+    box-shadow:
+
+    0 0 25px #ff0000,
+
+    0 0 60px #ff0000,
+
+    0 0 100px rgba(255,0,0,.7);
+
+
+}
+
+
+
+.blue.active {
+
+
+    box-shadow:
+
+    0 0 25px #008cff,
+
+    0 0 60px #008cff,
+
+    0 0 100px rgba(0,140,255,.7);
+
+
+}/* =====================
+   CAR PAGE
+===================== */
+
+
 .car-body {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
+
+    height:100vh;
+
+    width:100vw;
+
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+
+    background:#050505;
+
 }
+
+
+
+/* Makes the car light bar fill nicely */
+
+
+.car-body .light-bar.large {
+
+    transform:scale(1);
+
+}
+
+
+
+/* =====================
+   AUDIO UNLOCK
+===================== */
+
 
 .unlock-overlay {
-    position: fixed;
-    top: 0; left: 0; width: 100%; height: 100%;
-    z-index: 999;
-    background: transparent;
-    cursor: pointer;
+
+    position:fixed;
+
+
+    top:0;
+
+    left:0;
+
+
+    width:100%;
+
+    height:100%;
+
+
+    z-index:999;
+
+
+    background:transparent;
+
+
+    cursor:pointer;
+
+}/* =====================
+   FINAL POLISH
+===================== */
+
+
+/* Button hover */
+
+.ctrl-btn:hover {
+
+    background:#242424;
+
+    border-color:#666;
+
+}
+
+
+
+/* Smooth page sizing */
+
+@media (max-width:700px){
+
+
+    .main-controls {
+
+        flex-direction:column;
+
+    }
+
+
+
+    .ctrl-btn {
+
+        width:220px;
+
+    }
+
+
+
+    .light-bar {
+
+        width:90vw;
+
+        height:70px;
+
+    }
+
+
+
+    .light-bar.large {
+
+        width:90vw;
+
+        height:180px;
+
+    }
+
+}
+
+
+
+/* Large screens */
+
+
+@media (min-width:1200px){
+
+
+    .light-bar.large {
+
+
+        height:280px;
+
+
+    }
+
+
+
+    .led {
+
+        border-radius:18px;
+
+    }
+
+
 }

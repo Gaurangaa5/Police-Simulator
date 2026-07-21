@@ -1,134 +1,738 @@
+// 🚔 Police Simulator
+// Firebase + Audio + System Setup
+
+
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
+
+// Firebase
+
 const firebaseConfig = {
+
     apiKey: "AIzaSyC_Sq_9puGZ0JcZaBTxcXOZieRLbrS3BJ8",
+
     authDomain: "police-simulator-gaura.firebaseapp.com",
-    databaseURL: "https://police-simulator-gaura-default-rtdb.asia-southeast1.firebasedatabase.app",
+
+    databaseURL:
+    "https://police-simulator-gaura-default-rtdb.asia-southeast1.firebasedatabase.app",
+
     projectId: "police-simulator-gaura",
-    storageBucket: "police-simulator-gaura.firebasestorage.app",
+
+    storageBucket:
+    "police-simulator-gaura.firebasestorage.app",
+
     messagingSenderId: "519382206394",
-    appId: "1:519382206394:web:4ccfcd15972a9edd80ff83"
+
+    appId:
+    "1:519382206394:web:4ccfcd15972a9edd80ff83"
+
 };
+
+
 
 const app = initializeApp(firebaseConfig);
+
+
 const db = getDatabase(app);
-const policeRef = ref(db, 'police');
 
-// Audio Objects
-const sirenAudio = new Audio('audio/Siren.wav');
+
+const policeRef = ref(db,"police");
+
+
+
+// =====================
+// AUDIO
+// =====================
+
+
+const sirenAudio =
+new Audio("audio/Siren.wav");
+
+
 sirenAudio.loop = true;
-const hornAudio = new Audio('audio/Horn.wav');
 
-// Local State
+
+
+const hornAudio =
+new Audio("audio/Horn.wav");
+
+
+
+
+// =====================
+// STATE
+// =====================
+
+
 let localState = {
-    siren: false,
-    lights: false,
-    hornTrigger: 0
+
+
+    siren:false,
+
+
+    lights:false,
+
+
+    hornTrigger:0,
+
+
+    pattern:"sweep"
+
+
 };
 
-// Check which page we are on
-const isController = document.getElementById('sirenBtn') !== null;
-const isCar = document.getElementById('mainBar') !== null;
 
-// --- Controller Logic ---
-if (isController) {
-    const sirenBtn = document.getElementById('sirenBtn');
-    const lightsBtn = document.getElementById('lightsBtn');
-    const hornBtn = document.getElementById('hornBtn');
-    const previewBar = document.getElementById('previewBar');
 
-    // Siren Toggle
-    sirenBtn.onclick = () => {
-        localState.siren = !localState.siren;
-        updateDB();
-    };
 
-    // Lights Toggle
-    lightsBtn.onclick = () => {
-        localState.lights = !localState.lights;
-        updateDB();
-    };
+// =====================
+// PAGE DETECTION
+// =====================
 
-    // Horn Trigger
-    hornBtn.onclick = () => {
-        localState.hornTrigger += 1;
-        updateDB();
-    };
 
-    function updateDB() {
-        set(policeRef, localState);
-    }
+const isController =
+document.getElementById("sirenBtn") !== null;
 
-    // Sync UI with DB (for local feedback)
-    onValue(policeRef, (snapshot) => {
-        const data = snapshot.val();
-        if (!data) return;
 
-        // Update Buttons
-        sirenBtn.classList.toggle('active', data.siren);
-        lightsBtn.classList.toggle('active', data.lights);
-        
-        // Local Audio
-        if (data.siren) {
-            if (sirenAudio.paused) sirenAudio.play().catch(e => {});
-        } else {
-            sirenAudio.pause();
-            sirenAudio.currentTime = 0;
-        }
 
-        // Preview Animation
-        previewBar.classList.toggle('animating', data.lights);
+const isCar =
+document.getElementById("mainBar") !== null;
+
+
+
+console.log("🚔 Police Simulator Loaded");// =====================
+// LIGHT PATTERN ENGINE
+// =====================
+
+
+let patternTimer = null;
+
+let patternFrame = 0;
+
+
+
+function clearLights(redLeds, blueLeds) {
+
+
+    [...redLeds, ...blueLeds].forEach(light => {
+
+        light.classList.remove("active");
+
     });
 
-    // Handle Horn locally
-    let lastHornCount = 0;
-    onValue(ref(db, 'police/hornTrigger'), (snapshot) => {
-        const count = snapshot.val() || 0;
-        if (count > lastHornCount) {
-            const h = new Audio('audio/Horn.wav');
-            h.play().catch(e => {});
-            lastHornCount = count;
-        }
-    });
+
 }
 
-// --- Car Logic ---
-if (isCar) {
-    const mainBar = document.getElementById('mainBar');
-    const unlock = document.getElementById('audioUnlock');
-    
-    // User must click once to allow audio
-    unlock.onclick = () => {
-        unlock.style.display = 'none';
-        // Play silent to initialize
-        sirenAudio.play().then(() => {
-            sirenAudio.pause();
-        }).catch(e => console.log("Audio init"));
+
+
+function stopPattern(redLeds, blueLeds) {
+
+
+    if(patternTimer){
+
+        clearInterval(patternTimer);
+
+        patternTimer = null;
+
+    }
+
+
+    if(redLeds && blueLeds){
+
+        clearLights(redLeds, blueLeds);
+
+    }
+
+
+}
+
+
+
+
+function startPattern(redLeds, blueLeds, pattern){
+
+
+    stopPattern(redLeds, blueLeds);
+
+
+
+    patternFrame = 0;
+
+
+
+    patternTimer = setInterval(()=>{
+
+
+        clearLights(redLeds, blueLeds);
+
+
+
+        // =====================
+        // SWEEP
+        // =====================
+
+        if(pattern === "sweep"){
+
+
+            redLeds[patternFrame]
+            .classList.add("active");
+
+
+            blueLeds[
+                blueLeds.length - 1 - patternFrame
+            ]
+            .classList.add("active");
+
+
+        }
+
+
+
+
+        // =====================
+        // ALTERNATE
+        // =====================
+
+        if(pattern === "alternate"){
+
+
+            if(patternFrame % 2 === 0){
+
+
+                redLeds.forEach(light =>
+                    light.classList.add("active")
+                );
+
+
+            }
+            else{
+
+
+                blueLeds.forEach(light =>
+                    light.classList.add("active")
+                );
+
+
+            }
+
+
+        }
+
+
+
+
+
+        // =====================
+        // WIG WAG
+        // =====================
+
+        if(pattern === "wigwag"){
+
+
+            if(patternFrame % 2 === 0){
+
+
+                redLeds.forEach(light =>
+                    light.classList.add("active")
+                );
+
+
+            }
+            else{
+
+
+                blueLeds.forEach(light =>
+                    light.classList.add("active")
+                );
+
+
+            }
+
+
+        }
+
+
+
+
+
+        // =====================
+        // FULL FLASH
+        // =====================
+
+        if(pattern === "flash"){
+
+
+            if(patternFrame % 2 === 0){
+
+
+                [...redLeds, ...blueLeds]
+                .forEach(light =>
+                    light.classList.add("active")
+                );
+
+
+            }
+
+
+        }
+
+
+
+
+        patternFrame++;
+
+
+        if(patternFrame >= 4){
+
+            patternFrame = 0;
+
+        }
+
+
+
+    },120);
+
+
+
+}// =====================
+// CONTROLLER SYSTEM
+// =====================
+
+
+if(isController){
+
+
+    const sirenBtn =
+    document.getElementById("sirenBtn");
+
+
+    const hornBtn =
+    document.getElementById("hornBtn");
+
+
+    const lightsBtn =
+    document.getElementById("lightsBtn");
+
+
+
+    const patternButtons =
+    document.querySelectorAll(".patternBtn");
+
+
+
+    const previewRed =
+    document.querySelectorAll("#previewBar .red");
+
+
+    const previewBlue =
+    document.querySelectorAll("#previewBar .blue");
+
+
+
+
+
+    // 🚨 Siren
+
+    sirenBtn.onclick = () => {
+
+
+        localState.siren =
+        !localState.siren;
+
+
+        set(policeRef, localState);
+
+
     };
 
-    let lastHornCount = 0;
 
-    onValue(policeRef, (snapshot) => {
-        const data = snapshot.val();
-        if (!data) return;
 
-        // Lights
-        mainBar.classList.toggle('animating', data.lights);
 
-        // Siren
-        if (data.siren) {
-            if (sirenAudio.paused) sirenAudio.play().catch(e => {});
-        } else {
-            sirenAudio.pause();
-            sirenAudio.currentTime = 0;
-        }
 
-        // Horn Trigger
-        if (data.hornTrigger > lastHornCount) {
-            const h = new Audio('audio/Horn.wav');
-            h.play().catch(e => {});
-            lastHornCount = data.hornTrigger;
-        }
+
+    // 🔴🔵 Lights
+
+    lightsBtn.onclick = () => {
+
+
+        localState.lights =
+        !localState.lights;
+
+
+        set(policeRef, localState);
+
+
+    };
+
+
+
+
+
+
+
+    // 📣 Horn
+
+    hornBtn.onclick = () => {
+
+
+        localState.hornTrigger++;
+
+
+        set(policeRef,localState);
+
+
+
+        const horn =
+        new Audio("audio/Horn.wav");
+
+
+        horn.play()
+        .catch(()=>{});
+
+
+    };
+
+
+
+
+
+
+
+    // 🚔 Pattern Selection
+
+    patternButtons.forEach(button => {
+
+
+        button.onclick = () => {
+
+
+            localState.pattern =
+            button.dataset.pattern;
+
+
+            set(policeRef,localState);
+
+
+
+            patternButtons.forEach(btn => {
+
+                btn.classList.remove("active");
+
+            });
+
+
+            button.classList.add("active");
+
+
+        };
+
+
     });
+
+
+
+
+
+
+
+    // Firebase Listener
+
+    onValue(policeRef,(snapshot)=>{
+
+
+        const data =
+        snapshot.val();
+
+
+        if(!data) return;
+
+
+
+        localState=data;
+
+
+
+
+
+
+        // Button states
+
+        sirenBtn.classList.toggle(
+            "active",
+            data.siren
+        );
+
+
+
+        lightsBtn.classList.toggle(
+            "active",
+            data.lights
+        );
+
+
+
+
+
+
+        // Local siren
+
+        if(data.siren){
+
+
+            if(sirenAudio.paused){
+
+                sirenAudio.play()
+                .catch(()=>{});
+
+            }
+
+
+        }
+
+        else{
+
+
+            sirenAudio.pause();
+
+            sirenAudio.currentTime=0;
+
+
+        }
+
+
+
+
+
+
+
+        // Preview Pattern
+
+        if(data.lights){
+
+
+            startPattern(
+                previewRed,
+                previewBlue,
+                data.pattern || "sweep"
+            );
+
+
+        }
+
+        else{
+
+
+            stopPattern(
+                previewRed,
+                previewBlue
+            );
+
+
+        }
+
+
+
+
+    });
+
+
+
+}// =====================
+// CAR SYSTEM
+// =====================
+
+
+if(isCar){
+
+
+    const unlock =
+    document.getElementById("audioUnlock");
+
+
+
+    const carRed =
+    document.querySelectorAll("#mainBar .red");
+
+
+    const carBlue =
+    document.querySelectorAll("#mainBar .blue");
+
+
+
+    let lastHorn = 0;
+
+
+
+
+
+
+
+    // 🔊 Unlock Audio
+
+    unlock.onclick = () => {
+
+
+        unlock.style.display = "none";
+
+
+        sirenAudio.play()
+
+        .then(()=>{
+
+
+            sirenAudio.pause();
+
+
+            sirenAudio.currentTime = 0;
+
+
+        })
+
+        .catch(()=>{});
+
+
+    };
+
+
+
+
+
+
+
+
+
+    // Firebase Listener
+
+    onValue(policeRef,(snapshot)=>{
+
+
+        const data =
+        snapshot.val();
+
+
+
+        if(!data) return;
+
+
+
+
+
+
+
+
+        // =====================
+        // LIGHTS
+        // =====================
+
+
+        if(data.lights){
+
+
+            startPattern(
+
+                carRed,
+
+                carBlue,
+
+                data.pattern || "sweep"
+
+            );
+
+
+        }
+
+        else{
+
+
+            stopPattern(
+
+                carRed,
+
+                carBlue
+
+            );
+
+
+        }
+
+
+
+
+
+
+
+
+        // =====================
+        // SIREN
+        // =====================
+
+
+        if(data.siren){
+
+
+            if(sirenAudio.paused){
+
+
+                sirenAudio.play()
+
+                .catch(()=>{});
+
+
+            }
+
+
+        }
+
+        else{
+
+
+            sirenAudio.pause();
+
+
+            sirenAudio.currentTime=0;
+
+
+        }
+
+
+
+
+
+
+
+
+
+        // =====================
+        // HORN
+        // =====================
+
+
+        if(data.hornTrigger > lastHorn){
+
+
+
+            const horn =
+            new Audio("audio/Horn.wav");
+
+
+
+            horn.play()
+
+            .catch(()=>{});
+
+
+
+            lastHorn =
+            data.hornTrigger;
+
+
+        }
+
+
+
+
+    });
+
+
+
 }
