@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Controller - Police System</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="controller-ui">
+        <div class="main-controls">
+            <button id="sirenBtn" class="ctrl-btn">🚨 Siren</button>
+            <button id="hornBtn" class="ctrl-btn">📣 Horn</button>
+            <button id="lightsBtn" class="ctrl-btn">🔴 Lights</button>
+        </div>
+
+        <div class="preview-section">
+            <div class="light-bar" id="previewBar">
+                <div class="light red" id="prevRed"></div>
+                <div class="light blue" id="prevBlue"></div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="script.js"></script>
+</body>
+</html>
