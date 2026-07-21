@@ -371,8 +371,7 @@ function startPattern(redLeds, blueLeds, pattern){
 
 
 
-    },120);
-
+},400);
 
 
 }// =====================
