@@ -1,0 +1,155 @@
+@font-face {
+    font-family: "Rotis";
+    src: url("Rotis-font.otf") format("opentype");
+}
+
+* {
+    font-family: "Rotis", sans-serif;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: #0a0a0a;
+    color: white;
+    overflow: hidden;
+}
+
+.centered-body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+/* Index Menu */
+.menu-container {
+    text-align: center;
+}
+
+h1 {
+    font-size: 2.5rem;
+    margin-bottom: 2rem;
+    letter-spacing: 2px;
+}
+
+.button-group {
+    display: flex;
+    gap: 20px;
+}
+
+.big-btn {
+    display: block;
+    width: 200px;
+    padding: 20px;
+    background: #1a1a1a;
+    color: white;
+    text-decoration: none;
+    border: 2px solid #333;
+    border-radius: 8px;
+    font-size: 1.2rem;
+    transition: all 0.3s ease;
+}
+
+.big-btn:hover {
+    background: #333;
+    border-color: #555;
+}
+
+/* Controller UI */
+.controller-ui {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    gap: 50px;
+}
+
+.main-controls {
+    display: flex;
+    gap: 15px;
+}
+
+.ctrl-btn {
+    padding: 20px 40px;
+    font-size: 1.2rem;
+    background: #151515;
+    color: white;
+    border: 1px solid #444;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.2s;
+    min-width: 140px;
+}
+
+.ctrl-btn:active {
+    transform: scale(0.95);
+}
+
+.ctrl-btn.active {
+    background: #cc0000;
+    border-color: #ff0000;
+    box-shadow: 0 0 15px rgba(255, 0, 0, 0.4);
+}
+
+/* Light Bar Construction */
+.light-bar {
+    width: 300px;
+    height: 60px;
+    background: #000;
+    border: 4px solid #1a1a1a;
+    border-radius: 15px;
+    display: flex;
+    padding: 5px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    position: relative;
+}
+
+.light-bar.large {
+    width: 80vw;
+    height: 30vh;
+    border-width: 10px;
+    border-radius: 30px;
+}
+
+.light {
+    flex: 1;
+    border-radius: 8px;
+    transition: background 0.1s ease;
+    opacity: 0.15;
+}
+
+.red { background: #ff0000; margin-right: 2px; }
+.blue { background: #0000ff; margin-left: 2px; }
+
+/* Animations */
+@keyframes flash-red {
+    0%, 49% { opacity: 1; box-shadow: 0 0 40px #ff0000; }
+    50%, 100% { opacity: 0.15; box-shadow: none; }
+}
+
+@keyframes flash-blue {
+    0%, 49% { opacity: 0.15; box-shadow: none; }
+    50%, 100% { opacity: 1; box-shadow: 0 0 40px #0000ff; }
+}
+
+.animating .red { animation: flash-red 0.6s infinite steps(2); }
+.animating .blue { animation: flash-blue 0.6s infinite steps(2); }
+
+/* Car Page Overlay */
+.car-body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.unlock-overlay {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    z-index: 999;
+    background: transparent;
+    cursor: pointer;
+}
