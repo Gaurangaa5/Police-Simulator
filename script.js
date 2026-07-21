@@ -4,11 +4,11 @@
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 
-import { 
-    getDatabase, 
-    ref, 
-    set, 
-    onValue 
+import {
+    getDatabase,
+    ref,
+    set,
+    onValue
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
 
@@ -43,11 +43,11 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 
-
 const db = getDatabase(app);
 
-
 const policeRef = ref(db,"police");
+
+
 
 
 
@@ -56,11 +56,14 @@ const policeRef = ref(db,"police");
 // =====================
 
 
-const sirenAudio =
-new Audio("audio/Siren.wav");
+const sirenAudio = new Audio(
+    "audio/Siren.wav"
+);
 
 
 sirenAudio.loop = true;
+
+
 
 
 
@@ -83,13 +86,17 @@ let localState = {
 
 
 
+
+
+
 // =====================
-// PAGE CHECK
+// PAGE DETECTION
 // =====================
 
 
 const isController =
 document.getElementById("sirenBtn") !== null;
+
 
 
 const isCar =
@@ -108,15 +115,12 @@ let patternFrame = 0;
 
 
 
-
 function clearLights(redLeds, blueLeds){
 
 
-    [...redLeds, ...blueLeds].forEach(light => {
-
+    [...redLeds, ...blueLeds].forEach(light=>{
 
         light.classList.remove("active");
-
 
     });
 
@@ -126,19 +130,14 @@ function clearLights(redLeds, blueLeds){
 
 
 
-
-
 function stopPattern(redLeds, blueLeds){
 
 
     if(patternTimer){
 
-
         clearInterval(patternTimer);
 
-
         patternTimer = null;
-
 
     }
 
@@ -146,12 +145,10 @@ function stopPattern(redLeds, blueLeds){
 
     if(redLeds && blueLeds){
 
-
         clearLights(
             redLeds,
             blueLeds
         );
-
 
     }
 
@@ -159,6 +156,50 @@ function stopPattern(redLeds, blueLeds){
 }
 
 
+
+
+
+function getPatternSpeed(pattern){
+
+
+    if(pattern === "normal"){
+
+        return 600;
+
+    }
+
+
+    if(pattern === "sweep"){
+
+        return 120;
+
+    }
+
+
+    if(pattern === "alternate"){
+
+        return 300;
+
+    }
+
+
+    if(pattern === "wigwag"){
+
+        return 250;
+
+    }
+
+
+    if(pattern === "flash"){
+
+        return 350;
+
+    }
+
+
+    return 400;
+
+}
 
 
 
@@ -173,14 +214,11 @@ function startPattern(redLeds, blueLeds, pattern){
     );
 
 
-
     patternFrame = 0;
 
 
 
-
     patternTimer = setInterval(()=>{
-
 
 
         clearLights(
@@ -193,7 +231,8 @@ function startPattern(redLeds, blueLeds, pattern){
 
 
         // =====================
-        // NORMAL POLICE FLASH
+        // NORMAL 🚨
+        // Red then Blue
         // =====================
 
 
@@ -203,22 +242,22 @@ function startPattern(redLeds, blueLeds, pattern){
             if(patternFrame % 2 === 0){
 
 
-                redLeds.forEach(light => {
+                redLeds.forEach(light=>
 
-                    light.classList.add("active");
+                    light.classList.add("active")
 
-                });
+                );
 
 
             }
             else{
 
 
-                blueLeds.forEach(light => {
+                blueLeds.forEach(light=>
 
-                    light.classList.add("active");
+                    light.classList.add("active")
 
-                });
+                );
 
 
             }
@@ -233,7 +272,7 @@ function startPattern(redLeds, blueLeds, pattern){
 
 
         // =====================
-        // SWEEP
+        // SWEEP ➡
         // =====================
 
 
@@ -241,13 +280,14 @@ function startPattern(redLeds, blueLeds, pattern){
 
 
             redLeds[patternFrame]
-            .classList.add("active");
+            ?.classList.add("active");
+
 
 
             blueLeds[
                 blueLeds.length - 1 - patternFrame
             ]
-            .classList.add("active");
+            ?.classList.add("active");
 
 
         }
@@ -259,7 +299,7 @@ function startPattern(redLeds, blueLeds, pattern){
 
 
         // =====================
-        // ALTERNATE
+        // ALTERNATE 🔴🔵
         // =====================
 
 
@@ -269,8 +309,10 @@ function startPattern(redLeds, blueLeds, pattern){
             if(patternFrame % 2 === 0){
 
 
-                redLeds.forEach(light =>
+                redLeds.forEach(light=>
+
                     light.classList.add("active")
+
                 );
 
 
@@ -278,8 +320,10 @@ function startPattern(redLeds, blueLeds, pattern){
             else{
 
 
-                blueLeds.forEach(light =>
+                blueLeds.forEach(light=>
+
                     light.classList.add("active")
+
                 );
 
 
@@ -294,9 +338,8 @@ function startPattern(redLeds, blueLeds, pattern){
 
 
 
-
         // =====================
-        // WIG WAG
+        // WIG WAG 🚔
         // =====================
 
 
@@ -306,8 +349,10 @@ function startPattern(redLeds, blueLeds, pattern){
             if(patternFrame % 2 === 0){
 
 
-                redLeds.forEach(light =>
+                redLeds.forEach(light=>
+
                     light.classList.add("active")
+
                 );
 
 
@@ -315,8 +360,10 @@ function startPattern(redLeds, blueLeds, pattern){
             else{
 
 
-                blueLeds.forEach(light =>
+                blueLeds.forEach(light=>
+
                     light.classList.add("active")
+
                 );
 
 
@@ -333,25 +380,29 @@ function startPattern(redLeds, blueLeds, pattern){
 
 
         // =====================
-        // FULL FLASH
+        // FLASH ⚡
+        // ALL RED + BLUE TOGETHER
         // =====================
 
 
         if(pattern === "flash"){
 
 
-            [...redLeds,...blueLeds]
-            .forEach(light => {
+            if(patternFrame % 2 === 0){
 
 
-                light.classList.add("active");
+                [...redLeds, ...blueLeds]
+                .forEach(light=>{
+
+                    light.classList.add("active");
+
+                });
 
 
-            });
+            }
 
 
         }
-
 
 
 
@@ -360,18 +411,15 @@ function startPattern(redLeds, blueLeds, pattern){
         patternFrame++;
 
 
-
-        if(patternFrame >= redLeds.length){
-
+        if(patternFrame >= 4){
 
             patternFrame = 0;
-
 
         }
 
 
 
-},400);
+    }, getPatternSpeed(pattern));
 
 
 }// =====================
@@ -411,16 +459,19 @@ if(isController){
 
 
 
-    // 🚨 Siren button
+    // 🚨 Siren Toggle
 
-    sirenBtn.onclick = () => {
+    sirenBtn.onclick = ()=>{
 
 
         localState.siren =
         !localState.siren;
 
 
-        set(policeRef,localState);
+        set(
+            policeRef,
+            localState
+        );
 
 
     };
@@ -430,17 +481,19 @@ if(isController){
 
 
 
+    // 🔴🔵 Lights Toggle
 
-    // 🔴🔵 Lights button
-
-    lightsBtn.onclick = () => {
+    lightsBtn.onclick = ()=>{
 
 
         localState.lights =
         !localState.lights;
 
 
-        set(policeRef,localState);
+        set(
+            policeRef,
+            localState
+        );
 
 
     };
@@ -451,16 +504,18 @@ if(isController){
 
 
 
+    // 📣 Horn
 
-    // 📣 Horn button
-
-    hornBtn.onclick = () => {
+    hornBtn.onclick = ()=>{
 
 
         localState.hornTrigger++;
 
 
-        set(policeRef,localState);
+        set(
+            policeRef,
+            localState
+        );
 
 
 
@@ -481,12 +536,12 @@ if(isController){
 
 
 
-    // 🚔 Pattern buttons
+    // 🚔 Pattern Buttons
 
-    patternButtons.forEach(button => {
+    patternButtons.forEach(button=>{
 
 
-        button.onclick = () => {
+        button.onclick = ()=>{
 
 
             localState.pattern =
@@ -494,23 +549,28 @@ if(isController){
 
 
 
-            set(policeRef,localState);
+            set(
+                policeRef,
+                localState
+            );
 
 
 
+            patternButtons.forEach(btn=>{
 
-            patternButtons.forEach(btn => {
 
-
-                btn.classList.remove("active");
+                btn.classList.remove(
+                    "active"
+                );
 
 
             });
 
 
 
-
-            button.classList.add("active");
+            button.classList.add(
+                "active"
+            );
 
 
         };
@@ -526,8 +586,7 @@ if(isController){
 
 
 
-    // Firebase listener
-
+    // Firebase Listener
 
     onValue(policeRef,(snapshot)=>{
 
@@ -548,25 +607,19 @@ if(isController){
 
 
 
+
         // Button states
 
-
         sirenBtn.classList.toggle(
-
             "active",
-
             data.siren
-
         );
 
 
 
         lightsBtn.classList.toggle(
-
             "active",
-
             data.lights
-
         );
 
 
@@ -575,11 +628,9 @@ if(isController){
 
 
 
-        // Siren audio
-
+        // Siren Sound
 
         if(data.siren){
-
 
 
             if(sirenAudio.paused){
@@ -593,11 +644,11 @@ if(isController){
 
 
         }
-
         else{
 
 
             sirenAudio.pause();
+
 
             sirenAudio.currentTime = 0;
 
@@ -610,8 +661,8 @@ if(isController){
 
 
 
-        // Preview lights
 
+        // Preview Light Bar
 
         if(data.lights){
 
@@ -628,7 +679,6 @@ if(isController){
 
 
         }
-
         else{
 
 
@@ -679,6 +729,7 @@ if(isCar){
 
 
 
+
     // =====================
     // AUDIO UNLOCK
     // =====================
@@ -687,10 +738,10 @@ if(isCar){
     if(unlock){
 
 
-        unlock.onclick = () => {
+        unlock.onclick = ()=>{
 
 
-            unlock.style.display="none";
+            unlock.style.display = "none";
 
 
 
@@ -725,7 +776,7 @@ if(isCar){
 
 
     // =====================
-    // FIREBASE LISTENER
+    // FIREBASE RECEIVER
     // =====================
 
 
@@ -738,6 +789,8 @@ if(isCar){
 
 
         if(!data) return;
+
+
 
 
 
@@ -765,7 +818,6 @@ if(isCar){
 
 
         }
-
         else{
 
 
@@ -787,13 +839,13 @@ if(isCar){
 
 
 
+
         // =====================
         // SIREN
         // =====================
 
 
         if(data.siren){
-
 
 
             if(sirenAudio.paused){
@@ -807,9 +859,7 @@ if(isCar){
             }
 
 
-
         }
-
         else{
 
 
@@ -828,6 +878,7 @@ if(isCar){
 
 
 
+
         // =====================
         // HORN
         // =====================
@@ -836,9 +887,10 @@ if(isCar){
         if(data.hornTrigger > lastHorn){
 
 
-
             const horn =
-            new Audio("audio/Horn.wav");
+            new Audio(
+                "audio/Horn.wav"
+            );
 
 
 
@@ -853,7 +905,6 @@ if(isCar){
 
 
         }
-
 
 
 
