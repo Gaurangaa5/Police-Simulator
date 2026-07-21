@@ -1,15 +1,25 @@
 @font-face {
+
     font-family: "Rotis";
+
     src: url("Rotis-font.otf") format("opentype");
+
 }
+
 
 
 * {
+
     font-family: "Rotis", sans-serif;
+
     box-sizing: border-box;
-    margin: 0;
-    padding: 0;
+
+    margin:0;
+
+    padding:0;
+
 }
+
 
 
 body {
@@ -23,15 +33,19 @@ body {
 }
 
 
-.centered-body {
 
-    display:flex;
-    justify-content:center;
-    align-items:center;
+.centered-body {
 
     height:100vh;
 
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
 }
+
 
 
 /* =====================
@@ -46,15 +60,17 @@ body {
 }
 
 
+
 h1 {
 
     font-size:2.5rem;
 
-    margin-bottom:2rem;
-
     letter-spacing:2px;
 
+    margin-bottom:30px;
+
 }
+
 
 
 .button-group {
@@ -64,6 +80,7 @@ h1 {
     gap:20px;
 
 }
+
 
 
 .big-btn {
@@ -82,22 +99,18 @@ h1 {
 
     border-radius:10px;
 
-    font-size:1.2rem;
-
     transition:.3s;
 
 }
+
 
 
 .big-btn:hover {
 
     background:#333;
 
-}
-
-
-/* =====================
-   CONTROLLER
+}/* =====================
+   CONTROLLER LAYOUT
 ===================== */
 
 
@@ -113,9 +126,10 @@ h1 {
 
     align-items:center;
 
-    gap:50px;
+    gap:40px;
 
 }
+
 
 
 .main-controls {
@@ -127,13 +141,35 @@ h1 {
 }
 
 
+
+.pattern-controls {
+
+    display:flex;
+
+    gap:12px;
+
+    flex-wrap:wrap;
+
+    justify-content:center;
+
+}
+
+
+
+
+
+/* =====================
+   BUTTONS
+===================== */
+
+
 .ctrl-btn {
 
     min-width:140px;
 
-    padding:20px 40px;
+    padding:18px 30px;
 
-    font-size:1.2rem;
+    font-size:1.1rem;
 
     background:#151515;
 
@@ -141,13 +177,24 @@ h1 {
 
     border:1px solid #444;
 
-    border-radius:8px;
+    border-radius:10px;
 
     cursor:pointer;
 
     transition:.2s;
 
 }
+
+
+
+.ctrl-btn:hover {
+
+    background:#252525;
+
+    border-color:#777;
+
+}
+
 
 
 .ctrl-btn:active {
@@ -157,12 +204,41 @@ h1 {
 }
 
 
+
+
+/* Active button */
+
 .ctrl-btn.active {
 
     background:#b00000;
 
+    border-color:red;
+
     box-shadow:
-    0 0 20px red;
+
+    0 0 15px red,
+
+    0 0 35px rgba(255,0,0,.5);
+
+}
+
+
+
+
+
+/* Pattern active button */
+
+.patternBtn.active {
+
+    background:#004cff;
+
+    border-color:#0099ff;
+
+    box-shadow:
+
+    0 0 15px #008cff,
+
+    0 0 35px rgba(0,140,255,.5);
 
 }/* =====================
    POLICE LIGHT BAR
@@ -173,26 +249,29 @@ h1 {
 
     width:320px;
 
-    height:75px;
+    height:80px;
 
     display:flex;
 
+    align-items:center;
+
     justify-content:space-between;
 
-    align-items:center;
+    gap:10px;
 
 
     background:
+
     linear-gradient(
         180deg,
-        #202020,
+        #222,
         #050505
     );
 
 
     border:4px solid #2b2b2b;
 
-    border-radius:18px;
+    border-radius:20px;
 
     padding:10px;
 
@@ -207,57 +286,54 @@ h1 {
 
 
 
-.light-bar.large {
 
+/* Big car display */
+
+.light-bar.large {
 
     width:80vw;
 
     max-width:1100px;
 
+    height:260px;
 
-    height:220px;
-
-
-    border-radius:30px;
+    border-radius:35px;
 
     border-width:8px;
 
-
-    padding:20px;
+    padding:25px;
 
 }
 
 
 
-/* Left and right sections */
+
+/* Left and right LED groups */
 
 
 .side {
 
-    width:48%;
-
     height:100%;
 
+    width:48%;
 
     display:flex;
 
-    gap:8px;
+    gap:10px;
 
 }
 
 
 
-/* Individual LEDs */
 
+
+/* LED */
 
 .led {
 
-
     flex:1;
 
-
-    border-radius:12px;
-
+    border-radius:15px;
 
     opacity:.12;
 
@@ -270,41 +346,39 @@ h1 {
 
     box-shadow .08s linear;
 
-
 }
 
 
 
-/* RED LEDs */
 
+
+/* RED */
 
 .red {
 
-
     background:
 
     linear-gradient(
 
         180deg,
 
-        #ffaaaa,
+        #ffb0b0,
 
         #ff0000 50%,
 
-        #850000
+        #750000
 
     );
-
 
 }
 
 
 
-/* BLUE LEDs */
 
+
+/* BLUE */
 
 .blue {
-
 
     background:
 
@@ -312,33 +386,29 @@ h1 {
 
         180deg,
 
-        #bde4ff,
+        #cceaff,
 
-        #0077ff 50%,
+        #008cff 50%,
 
-        #003080
+        #003060
 
     );
-
 
 }
 
 
 
-/* Gloss reflection */
 
+
+/* LED shine */
 
 .led::after {
 
-
     content:"";
-
 
     display:block;
 
-
     height:35%;
-
 
     width:100%;
 
@@ -356,28 +426,28 @@ h1 {
 
     );
 
+}/* =====================
+   ACTIVE LIGHT EFFECTS
+===================== */
 
-}
 
-
-
-/* Active LED glow */
-
+/* Any active LED */
 
 .led.active {
 
-
     opacity:1;
 
-    transform:scale(1.05);
-
+    transform:scale(1.06);
 
 }
 
 
 
-.red.active {
 
+
+/* Red glow */
+
+.red.active {
 
     box-shadow:
 
@@ -387,13 +457,15 @@ h1 {
 
     0 0 100px rgba(255,0,0,.7);
 
-
 }
 
 
 
-.blue.active {
 
+
+/* Blue glow */
+
+.blue.active {
 
     box-shadow:
 
@@ -403,8 +475,13 @@ h1 {
 
     0 0 100px rgba(0,140,255,.7);
 
+}
 
-}/* =====================
+
+
+
+
+/* =====================
    CAR PAGE
 ===================== */
 
@@ -415,28 +492,16 @@ h1 {
 
     width:100vw;
 
-
     display:flex;
 
     justify-content:center;
 
     align-items:center;
 
-
     background:#050505;
 
 }
 
-
-
-/* Makes the car light bar fill nicely */
-
-
-.car-body .light-bar.large {
-
-    transform:scale(1);
-
-}
 
 
 
@@ -449,50 +514,38 @@ h1 {
 
     position:fixed;
 
-
     top:0;
 
     left:0;
-
 
     width:100%;
 
     height:100%;
 
 
-    z-index:999;
-
-
     background:transparent;
+
+
+    z-index:999;
 
 
     cursor:pointer;
 
 }/* =====================
-   FINAL POLISH
+   RESPONSIVE DESIGN
 ===================== */
 
-
-/* Button hover */
-
-.ctrl-btn:hover {
-
-    background:#242424;
-
-    border-color:#666;
-
-}
-
-
-
-/* Smooth page sizing */
 
 @media (max-width:700px){
 
 
-    .main-controls {
+    .main-controls,
+
+    .pattern-controls {
 
         flex-direction:column;
+
+        align-items:center;
 
     }
 
@@ -506,6 +559,7 @@ h1 {
 
 
 
+
     .light-bar {
 
         width:90vw;
@@ -516,11 +570,23 @@ h1 {
 
 
 
+
     .light-bar.large {
 
         width:90vw;
 
-        height:180px;
+        height:170px;
+
+        padding:15px;
+
+    }
+
+
+
+
+    .led {
+
+        border-radius:10px;
 
     }
 
@@ -528,7 +594,11 @@ h1 {
 
 
 
-/* Large screens */
+
+
+/* =====================
+   BIG SCREENS
+===================== */
 
 
 @media (min-width:1200px){
@@ -536,9 +606,7 @@ h1 {
 
     .light-bar.large {
 
-
-        height:280px;
-
+        height:300px;
 
     }
 
@@ -546,9 +614,32 @@ h1 {
 
     .led {
 
-        border-radius:18px;
+        border-radius:20px;
 
     }
 
+}
+
+
+
+
+
+/* =====================
+   SMOOTH LOOK
+===================== */
+
+
+button {
+
+    user-select:none;
+
+}
+
+
+::selection {
+
+    background:#008cff;
+
+    color:white;
 
 }

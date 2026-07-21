@@ -1,12 +1,22 @@
 // 🚔 Police Simulator
-// Firebase + Audio + System Setup
+// Firebase + Audio + Pattern System
 
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+import { 
+    getDatabase, 
+    ref, 
+    set, 
+    onValue 
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
 
-// Firebase
+
+// =====================
+// FIREBASE
+// =====================
+
 
 const firebaseConfig = {
 
@@ -54,12 +64,6 @@ sirenAudio.loop = true;
 
 
 
-const hornAudio =
-new Audio("audio/Horn.wav");
-
-
-
-
 // =====================
 // STATE
 // =====================
@@ -67,32 +71,25 @@ new Audio("audio/Horn.wav");
 
 let localState = {
 
-
     siren:false,
-
 
     lights:false,
 
-
     hornTrigger:0,
 
-
-    pattern:"sweep"
-
+    pattern:"normal"
 
 };
 
 
 
-
 // =====================
-// PAGE DETECTION
+// PAGE CHECK
 // =====================
 
 
 const isController =
 document.getElementById("sirenBtn") !== null;
-
 
 
 const isCar =
@@ -111,12 +108,15 @@ let patternFrame = 0;
 
 
 
-function clearLights(redLeds, blueLeds) {
+
+function clearLights(redLeds, blueLeds){
 
 
     [...redLeds, ...blueLeds].forEach(light => {
 
+
         light.classList.remove("active");
+
 
     });
 
@@ -125,21 +125,33 @@ function clearLights(redLeds, blueLeds) {
 
 
 
-function stopPattern(redLeds, blueLeds) {
+
+
+
+function stopPattern(redLeds, blueLeds){
 
 
     if(patternTimer){
 
+
         clearInterval(patternTimer);
 
+
         patternTimer = null;
+
 
     }
 
 
+
     if(redLeds && blueLeds){
 
-        clearLights(redLeds, blueLeds);
+
+        clearLights(
+            redLeds,
+            blueLeds
+        );
+
 
     }
 
@@ -149,10 +161,16 @@ function stopPattern(redLeds, blueLeds) {
 
 
 
+
+
+
 function startPattern(redLeds, blueLeds, pattern){
 
 
-    stopPattern(redLeds, blueLeds);
+    stopPattern(
+        redLeds,
+        blueLeds
+    );
 
 
 
@@ -160,16 +178,64 @@ function startPattern(redLeds, blueLeds, pattern){
 
 
 
+
     patternTimer = setInterval(()=>{
 
 
-        clearLights(redLeds, blueLeds);
+
+        clearLights(
+            redLeds,
+            blueLeds
+        );
+
+
+
+
+
+        // =====================
+        // NORMAL POLICE FLASH
+        // =====================
+
+
+        if(pattern === "normal"){
+
+
+            if(patternFrame % 2 === 0){
+
+
+                redLeds.forEach(light => {
+
+                    light.classList.add("active");
+
+                });
+
+
+            }
+            else{
+
+
+                blueLeds.forEach(light => {
+
+                    light.classList.add("active");
+
+                });
+
+
+            }
+
+
+        }
+
+
+
+
 
 
 
         // =====================
         // SWEEP
         // =====================
+
 
         if(pattern === "sweep"){
 
@@ -187,38 +253,15 @@ function startPattern(redLeds, blueLeds, pattern){
         }
 
 
-// =====================
-// NORMAL POLICE FLASH
-// =====================
-
-if(pattern === "normal"){
 
 
-    if(patternFrame % 2 === 0){
 
 
-        redLeds.forEach(light =>
-            light.classList.add("active")
-        );
-
-
-    }
-    else{
-
-
-        blueLeds.forEach(light =>
-            light.classList.add("active")
-        );
-
-
-    }
-
-
-}
 
         // =====================
         // ALTERNATE
         // =====================
+
 
         if(pattern === "alternate"){
 
@@ -249,9 +292,13 @@ if(pattern === "normal"){
 
 
 
+
+
+
         // =====================
         // WIG WAG
         // =====================
+
 
         if(pattern === "wigwag"){
 
@@ -282,26 +329,30 @@ if(pattern === "normal"){
 
 
 
+
+
+
         // =====================
         // FULL FLASH
         // =====================
 
+
         if(pattern === "flash"){
 
 
-            if(patternFrame % 2 === 0){
+            [...redLeds,...blueLeds]
+            .forEach(light => {
 
 
-                [...redLeds, ...blueLeds]
-                .forEach(light =>
-                    light.classList.add("active")
-                );
+                light.classList.add("active");
 
 
-            }
+            });
 
 
         }
+
+
 
 
 
@@ -309,15 +360,19 @@ if(pattern === "normal"){
         patternFrame++;
 
 
-        if(patternFrame >= 4){
+
+        if(patternFrame >= redLeds.length){
+
 
             patternFrame = 0;
+
 
         }
 
 
 
-    },250);
+    },120);
+
 
 
 }// =====================
@@ -357,7 +412,7 @@ if(isController){
 
 
 
-    // 🚨 Siren
+    // 🚨 Siren button
 
     sirenBtn.onclick = () => {
 
@@ -366,7 +421,7 @@ if(isController){
         !localState.siren;
 
 
-        set(policeRef, localState);
+        set(policeRef,localState);
 
 
     };
@@ -376,7 +431,8 @@ if(isController){
 
 
 
-    // 🔴🔵 Lights
+
+    // 🔴🔵 Lights button
 
     lightsBtn.onclick = () => {
 
@@ -385,7 +441,7 @@ if(isController){
         !localState.lights;
 
 
-        set(policeRef, localState);
+        set(policeRef,localState);
 
 
     };
@@ -396,7 +452,8 @@ if(isController){
 
 
 
-    // 📣 Horn
+
+    // 📣 Horn button
 
     hornBtn.onclick = () => {
 
@@ -424,7 +481,8 @@ if(isController){
 
 
 
-    // 🚔 Pattern Selection
+
+    // 🚔 Pattern buttons
 
     patternButtons.forEach(button => {
 
@@ -436,15 +494,21 @@ if(isController){
             button.dataset.pattern;
 
 
+
             set(policeRef,localState);
+
 
 
 
             patternButtons.forEach(btn => {
 
+
                 btn.classList.remove("active");
 
+
             });
+
+
 
 
             button.classList.add("active");
@@ -461,7 +525,10 @@ if(isController){
 
 
 
-    // Firebase Listener
+
+
+    // Firebase listener
+
 
     onValue(policeRef,(snapshot)=>{
 
@@ -470,11 +537,12 @@ if(isController){
         snapshot.val();
 
 
+
         if(!data) return;
 
 
 
-        localState=data;
+        localState = data;
 
 
 
@@ -483,16 +551,23 @@ if(isController){
 
         // Button states
 
+
         sirenBtn.classList.toggle(
+
             "active",
+
             data.siren
+
         );
 
 
 
         lightsBtn.classList.toggle(
+
             "active",
+
             data.lights
+
         );
 
 
@@ -500,15 +575,20 @@ if(isController){
 
 
 
-        // Local siren
+
+        // Siren audio
+
 
         if(data.siren){
 
 
+
             if(sirenAudio.paused){
+
 
                 sirenAudio.play()
                 .catch(()=>{});
+
 
             }
 
@@ -520,7 +600,7 @@ if(isController){
 
             sirenAudio.pause();
 
-            sirenAudio.currentTime=0;
+            sirenAudio.currentTime = 0;
 
 
         }
@@ -531,15 +611,20 @@ if(isController){
 
 
 
-        // Preview Pattern
+        // Preview lights
+
 
         if(data.lights){
 
 
             startPattern(
+
                 previewRed,
+
                 previewBlue,
-                data.pattern || "sweep"
+
+                data.pattern || "normal"
+
             );
 
 
@@ -549,13 +634,15 @@ if(isController){
 
 
             stopPattern(
+
                 previewRed,
+
                 previewBlue
+
             );
 
 
         }
-
 
 
 
@@ -593,41 +680,55 @@ if(isCar){
 
 
 
-    // 🔊 Unlock Audio
-
-    unlock.onclick = () => {
-
-
-        unlock.style.display = "none";
+    // =====================
+    // AUDIO UNLOCK
+    // =====================
 
 
-        sirenAudio.play()
-
-        .then(()=>{
+    if(unlock){
 
 
-            sirenAudio.pause();
+        unlock.onclick = () => {
 
 
-            sirenAudio.currentTime = 0;
-
-
-        })
-
-        .catch(()=>{});
-
-
-    };
+            unlock.style.display="none";
 
 
 
+            sirenAudio.play()
+
+            .then(()=>{
+
+
+                sirenAudio.pause();
+
+
+                sirenAudio.currentTime = 0;
+
+
+            })
+
+            .catch(()=>{});
+
+
+
+        };
+
+
+    }
 
 
 
 
 
 
-    // Firebase Listener
+
+
+
+    // =====================
+    // FIREBASE LISTENER
+    // =====================
+
 
     onValue(policeRef,(snapshot)=>{
 
@@ -638,7 +739,6 @@ if(isCar){
 
 
         if(!data) return;
-
 
 
 
@@ -660,7 +760,7 @@ if(isCar){
 
                 carBlue,
 
-                data.pattern || "sweep"
+                data.pattern || "normal"
 
             );
 
@@ -696,6 +796,7 @@ if(isCar){
         if(data.siren){
 
 
+
             if(sirenAudio.paused){
 
 
@@ -707,6 +808,7 @@ if(isCar){
             }
 
 
+
         }
 
         else{
@@ -715,11 +817,10 @@ if(isCar){
             sirenAudio.pause();
 
 
-            sirenAudio.currentTime=0;
+            sirenAudio.currentTime = 0;
 
 
         }
-
 
 
 
